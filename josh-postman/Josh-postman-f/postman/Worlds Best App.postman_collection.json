@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "5c657e69-43ad-4abb-a799-4598e82c73bc",
+		"name": "Worlds Best App",
+		"description": "API tests for the worlds best app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5da03b8-9fc9-483f-a464-d77aef4ff3b3",
+						"exec": [
+							"pm.test(\"the username is returned\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.username).to.eql('Dr I Test');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"test@drugdev.com\",\n\t\"password\": \"supers3cret\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "Create succesfully login request"
+			},
+			"response": []
+		},
+		{
+			"name": "Login Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ba24cfa5-4ee3-4b4d-8ae6-b6d7517e6948",
+						"exec": [
+							"pm.test(\"return an array of errors\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(Array.isArray(jsonData.errors)).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"return a first error title is 'Credentials are incorrect' \", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.errors[0].title).to.eql('Credentials are incorrect');",
+							"});",
+							"",
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.expect(pm.response).to.have.status(401);",
+							"});",
+							"",
+							"",
+							"/** NOTES:",
+							"    I've removed the status code assertion from `return an array of errors` ",
+							"    in line with the single assertion principle. Also, that assertion is an unnecessary ",
+							"    duplication of the assertion in the test `Status code is 401`",
+							"    ",
+							"    ",
+							"    I have also left the test `Status code is 401` failing as the API is set to res.status(200)",
+							"    when it should be returning a 401.",
+							"",
+							"*/"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"test@drugdev.com\",\n\t\"password\": \"supers3cret3\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "Create error login request"
+			},
+			"response": []
+		}
+	]
+}
